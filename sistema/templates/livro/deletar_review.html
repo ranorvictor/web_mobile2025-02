@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block titulo %} Excluir Avaliação {% endblock %}
+
+{% block conteudo %}
+
+<div class="card border-danger mb-3" style="max-width: 40rem; margin: 0 auto;">
+    <div class="card-header bg-danger text-white">Confirmação de Exclusão</div>
+    <div class="card-body">
+        <h5 class="card-title">Tem certeza que deseja apagar este review?</h5>
+        <p class="card-text">
+            Livro: <strong>{{ object.livro.titulo }}</strong><br>
+            Nota: {{ object.nota }}
+        </p>
+        <p class="text-muted">Essa ação não pode ser desfeita.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Sim, apagar review</button>
+            <a href="{% url 'meus_reviews' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

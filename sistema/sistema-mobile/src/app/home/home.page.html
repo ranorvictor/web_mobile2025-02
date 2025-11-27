@@ -1,19 +1,32 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Blank
+      Livros Cadastrados
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  
+  <ion-list>
+    <ion-card *ngFor="let livro of listaLivros">
+      
+      <img *ngIf="livro.foto" [src]="livro.foto" />
+      
+      <ion-card-header>
+        <ion-card-subtitle>Ano: {{ livro.ano }}</ion-card-subtitle>
+        <ion-card-title>{{ livro.titulo }}</ion-card-title>
+      </ion-card-header>
 
-  <div id="container">
-    Ínicio
-    </div>
+      <ion-card-content>
+        <p><strong>Autor:</strong> {{ livro.autor }}</p>
+        <p><strong>Gênero:</strong> {{ livro.genero }}</p>
+        
+        <p *ngIf="livro.sinopse">
+          {{ livro.sinopse.slice(0, 100) }}...
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
 </ion-content>

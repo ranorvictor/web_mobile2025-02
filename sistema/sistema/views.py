@@ -1,39 +1,48 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from rest_framework.authtoken.views import ObtainAuthToken as obtainAuthToken
 from rest_framework.authtoken.models import Token   
 from rest_framework.response import Response
+from livro.models import Perfil
 
 class Login(View):
 
     def get(self, request):
         contexto = {}
         if request.user.is_authenticated:
-            return redirect("/livro")
+            # Redireciona usando o 'name' da URL definido em urls.py
+            return redirect('listar_livro') 
         else:
             return render(request, 'autenticacao.html', contexto)
     
     def post(self, request):
-
         usuario = request.POST.get('usuario', None)
         senha = request.POST.get('senha', None)
 
         user = authenticate(request, username=usuario, password=senha)
+        
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect("/livro") 
-        else:
-            return render(request, 'autenticacao.html', {'mensagem' : "usuario autenticado com sucesso!"})
+                
+                # --- CORREÇÃO AQUI ---
+                # Verifica se o usuário tem perfil. Se der erro (não tem), cria um.
+                try:
+                    p = user.perfil
+                except Perfil.DoesNotExist: # Ou RelatedObjectDoesNotExist
+                    Perfil.objects.create(usuario=user)
+                # ---------------------
+
+                return redirect('listar_livro') 
         
+        return render(request, 'autenticacao.html', {'mensagem' : "Usuário ou senha incorretos!"})
 class Logout(View):
 
     def get(self, request):
         logout(request)
-        return redirect('/')
+        return redirect('/') # Redireciona para a tela de login
     
 class LoginAPI(obtainAuthToken):
 

@@ -1,30 +1,69 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-    <header>
 
-        <title>Login</title>
-        <link type="text/css" rel='stylesheet' href="{% static 'css/style.css' %}">
-        <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
-    </header>
-    <body>
-        <form action="/" method="post">
-            {% csrf_token %}
-            <h1>Login</h1>
-            <div class="form-group">
-                <label for="usuario">Usuário:</label>
-                <input name="usuario" type="text" id="usuario">
+{% block titulo %} Login {% endblock %}
+
+{% block conteudo %}
+
+<div class="row align-items-center justify-content-center mt-5">
+    
+    <div class="col-md-6 mb-4 mb-md-0 text-center text-md-start">
+        <img src="{% static 'img/ilustracoes/leitores.png' %}" 
+             class="img-fluid mb-4" 
+             alt="Ilustração de Leitores"
+             style="max-height: 350px;">
+
+        <h2 class="fw-bold text-primary">Sua Biblioteca Pessoal</h2>
+        <p class="lead text-muted">
+            Organize suas leituras, escreva resenhas e mantenha seu histórico literário sempre em dia.
+            Junte-se à nossa comunidade de leitores!
+        </p>
+    </div>
+
+    <div class="col-md-5 offset-md-1">
+        <div class="card p-4 shadow-lg border-0">
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold">Login</h3>
+                    <small class="text-muted">Entre para acessar suas resenhas</small>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="usuario" class="form-label fw-bold">Usuário</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fa-solid fa-user"></i></span>
+                        <input name="usuario" type="text" id="usuario" class="form-control" placeholder="Seu username" required>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="senha" class="form-label fw-bold">Senha</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fa-solid fa-lock"></i></span>
+                        <input name="senha" type="password" id="senha" class="form-control" placeholder="Sua senha" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100 btn-lg mb-3">Entrar</button>
+
+                <hr>
+                
+                <div class="text-center">
+                    <p class="mb-2">Ainda não tem conta?</p>
+                    <a href="{% url 'cadastro_usuario' %}" class="btn btn-outline-success w-100">Criar Nova Conta</a>
+                </div>
+
+            </form>
+
+            {% if mensagem %}
+            <div class="alert alert-danger mt-3 text-center shadow-sm" role="alert">
+                <i class="fa-solid fa-circle-exclamation"></i> {{ mensagem }}
             </div>
-            <div class="form-group">
-                <label for="senha">Senha: </label>
-                <input name="senha" type="password" id="senha">
-            </div>
-            <button type="submit" class="btn btn-primary" value="Submit">Entrar</button>
-        </form>
-        {% if mensagem %}
-        <div class="alert alert-danger" role="alert">
-            {{mensagem}}
+            {% endif %}
         </div>
-        {% endif %}
-    </body>
-</html>
+    </div>
+</div>
+
+{% endblock %}

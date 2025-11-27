@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@ionic/cli": "^7.2.1"
+    "@ionic/cli": "^7.2.1",
+    "bootstrap": "^5.3.8"
   }
 }

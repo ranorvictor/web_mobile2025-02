@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block titulo %} Meus Reviews {% endblock %}
+
+{% block conteudo %}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2><i class="fa-solid fa-book-open"></i> Diário de Leitura de {{ user.username }}</h2>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'criar_review' %}" class="btn btn-success">
+            <i class="fa-solid fa-plus"></i> Novo Review
+        </a>
+    </div>
+</div>
+
+{% if reviews %}
+    <div class="row">
+    {% for review in reviews %}
+        <div class="col-md-12 mb-4"> 
+            <div class="card h-100 shadow-sm">
+                
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="m-0 text-primary fw-bold">{{ review.livro.titulo }}</h5>
+                        <small class="text-muted">
+                            Autor: {{ review.livro.get_autor_display }} | 
+                            Lido em: {{ review.data_criacao|date:"d/m/Y" }}
+                        </small>
+                    </div>
+                    <span class="badge bg-warning text-dark fs-6">Nota: {{ review.nota }}/5</span>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        
+                        <div class="col-md-2 text-center">
+                            {% if review.livro.foto %}
+                                <img src="{{ review.livro.foto.url }}" 
+                                     alt="Capa de {{ review.livro.titulo }}" 
+                                     class="img-fluid rounded shadow-sm" 
+                                     style="max-height: 150px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-secondary text-white d-flex justify-content-center align-items-center rounded" style="height: 150px;">
+                                    <i class="fa-solid fa-image fa-2x"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-10">
+                            <h6 class="card-subtitle mb-2 text-muted">Sua opinião:</h6>
+                            <p class="card-text fs-5 fst-italic p-3 bg-light rounded border-start border-4 border-primary">
+                                "{{ review.texto }}"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <a href="{% url 'editar_review' review.id %}" class="btn btn-outline-primary">
+                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                    </a>
+                    <a href="{% url 'deletar_review' review.id %}" class="btn btn-outline-danger">
+                        <i class="fa-solid fa-trash"></i> Excluir
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-warning text-center p-5">
+        <h4>Você ainda não avaliou nenhum livro!</h4>
+        <a href="{% url 'criar_review' %}" class="btn btn-outline-dark mt-2">Escrever primeira crítica</a>
+    </div>
+{% endif %}
+
+{% endblock %}
