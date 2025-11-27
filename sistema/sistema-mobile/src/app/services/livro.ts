@@ -7,8 +7,6 @@ import { Observable } from 'rxjs';
 })
 export class LivroService {
 
-  // Troque pelo IP do seu computador (Use 'hostname -I' no terminal para saber)
-  // Não use 'localhost' pois o emulador do celular não entende.
   private apiUrl = 'http://20.20.1.147:8000/livro/api/'; 
 
   constructor(private http: HttpClient) { }

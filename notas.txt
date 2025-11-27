@@ -30,3 +30,5 @@ App store (swift) e Google play(Cordova): ferramenta mais utilizada para cria√ß√
 
 ionic start sistema-mobile blank --type=angular
 
+aciona com .venv
+

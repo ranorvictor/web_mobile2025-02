@@ -6,14 +6,11 @@ from .models import Livro, Review, Perfil
 class LivroModelTest(TestCase):
     
     def setUp(self):
-        # Cria um livro de exemplo para usar nos testes
-        # Nota: Estou usando os IDs (1) para autor/editora/genero pois seu model
-        # neste código ainda usa SmallIntegerField com choices.
         self.ano_atual = datetime.now().year
         self.livro = Livro.objects.create(
             titulo="Livro de Teste",
             genero=1,
-            ano=self.ano_atual, # Cria com ano atual
+            ano=self.ano_atual,
             autor=1,
             editora=1,
             sinopse="Uma sinopse de teste."
@@ -52,7 +49,6 @@ class LivroModelTest(TestCase):
             autor=1,
             editora=1
         )
-        # Se estamos em 2025 e o livro é 2000, deve retornar 25
         esperado = self.ano_atual - 2000
         self.assertEqual(livro_velho.anos_de_uso(), esperado)
 
@@ -60,7 +56,6 @@ class LivroModelTest(TestCase):
 class ReviewModelTest(TestCase):
 
     def setUp(self):
-        # Cria usuário e livro para o review
         self.user = User.objects.create_user(username='leitor', password='123')
         self.livro = Livro.objects.create(
             titulo="Dom Casmurro",
@@ -91,15 +86,12 @@ class PerfilSignalTest(TestCase):
         O teste mais importante: Verifica se o SINAL (post_save)
         criou o perfil sozinho ao criar um User.
         """
-        # 1. Cria apenas o usuário
         novo_usuario = User.objects.create_user(username='novato', password='123')
         
-        # 2. Verifica se o perfil existe no banco
         existe_perfil = Perfil.objects.filter(usuario=novo_usuario).exists()
         self.assertTrue(existe_perfil)
         
     def test_perfil_padrao(self):
         """Verifica se o perfil nasce com o ícone padrão"""
         novo_usuario = User.objects.create_user(username='padrao', password='123')
-        # Acessa o perfil criado automaticamente
         self.assertEqual(novo_usuario.perfil.icone, 'avatar1.jpg')

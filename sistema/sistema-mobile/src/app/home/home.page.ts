@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Importante para *ngFor e *ngIf
+import { CommonModule } from '@angular/common'; 
 
-// Importe TODOS os componentes visuais que vai usar
 import { 
   IonContent, 
   IonHeader, 
@@ -15,15 +14,16 @@ import {
   IonCardContent 
 } from '@ionic/angular/standalone';
 
-import { LivroService } from '../services/livro';
+import { LivroService } from '../services/livro.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  standalone: true, // Garanta que isso está true
+  standalone: true, 
   imports: [
-    CommonModule, // Necessário para lógica (if/for)
+    CommonModule, 
     IonContent, 
     IonHeader, 
     IonTitle, 
@@ -33,7 +33,8 @@ import { LivroService } from '../services/livro';
     IonCardHeader, 
     IonCardSubtitle, 
     IonCardTitle, 
-    IonCardContent
+    IonCardContent,
+    HttpClientModule
   ],
 })
 export class HomePage implements OnInit {
@@ -47,7 +48,7 @@ export class HomePage implements OnInit {
   }
 
   carregarLivros() {
-    this.livroService.getLivros().subscribe(
+    this.livroService.listar().subscribe(
       (data) => {
         console.log('Livros:', data);
         this.listaLivros = data;
