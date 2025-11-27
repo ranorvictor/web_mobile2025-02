@@ -3,6 +3,7 @@
 {% block titulo %} Listagem de Livros {% endblock %}
 
 {% block conteudo %}
+<h2><i class="fa-solid fa-book-open"></i> Cadastrar um novo livro!</h2>
 
 <form action="/livro/novo" method="post" enctype="multipart/form-data">
 {% csrf_token %}
@@ -34,6 +35,12 @@
         <div class="col-6">
             <label for="editora" class="form-label">Editora</label>
             {{ form.editora }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-12">
+            <label for="sinopse" class="form-label">Sinopse</label>
+            {{ form.sinopse }}
         </div>
     </div>
     <div class="row">

@@ -1,11 +1,15 @@
 from datetime import datetime
 from django.db import models
-from livro.consts import OPCOES_GENERO, OPCOES_AUTORES, OPCOES_EDITORAS
+from django.contrib.auth.models import User
+from livro.consts import OPCOES_GENERO, OPCOES_AUTORES, OPCOES_EDITORAS, OPCOES_ICONES
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 class Livro(models.Model):
     genero = models.SmallIntegerField(choices=OPCOES_GENERO)
     titulo = models.CharField(max_length=200)
+    sinopse = models.TextField(max_length=1500, blank=True, verbose_name="Sinopse")
     ano = models.IntegerField()
     autor = models.SmallIntegerField(choices=OPCOES_AUTORES)
     editora = models.SmallIntegerField(choices=OPCOES_EDITORAS)
@@ -20,3 +24,32 @@ class Livro(models.Model):
 
     def anos_de_uso(self):
         return datetime.now().year - self.ano
+    
+class Review(models.Model):
+    livro = models.ForeignKey(Livro, on_delete=models.CASCADE, related_name='reviews')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    nota = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)]) # Notas 1 a 5
+    texto = models.TextField()
+    data_criacao = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.livro.titulo} - {self.nota}"
+    
+class Perfil(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
+    icone = models.CharField(max_length=50, choices=OPCOES_ICONES, default='avatar1.png')
+    bio = models.TextField(max_length=500, blank=True, verbose_name="Sobre mim")
+
+    def __str__(self):
+        return f"Perfil de {self.usuario.username}"
+
+# --- SINAL MÁGICO ---
+# Isso cria o Perfil automaticamente assim que um User é criado no cadastro
+@receiver(post_save, sender=User)
+def criar_perfil(sender, instance, created, **kwargs):
+    if created:
+        Perfil.objects.create(usuario=instance)
+
+@receiver(post_save, sender=User)
+def salvar_perfil(sender, instance, **kwargs):
+    instance.perfil.save()

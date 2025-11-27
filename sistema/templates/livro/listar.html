@@ -10,10 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
 
@@ -22,7 +19,7 @@
     <div class="container mx-auto mt-8 p-4">
 
         <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">Livros Cadastrados</h2>
+            <h2 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">Livros Disponíveis</h2>
             <div class="w-full md:w-1/3">
                 <form method="get" class="flex items-center">
                     <input type="text" name="busca"
@@ -42,43 +39,89 @@
             <span class="font-bold text-teal-700">{{ listar_livro | length }}</span>
         </p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
             {% for livro in listar_livro %}
-            <div
-                class="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                {% if livro.foto %}
-                <img src="{{ livro.foto.url }}" alt="Foto do livro" class="w-full h-48 object-cover">
-                {% else %}
-                <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    <span class="text-gray-500">Livro sem foto</span>
+            
+            <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 flex flex-row min-h-[14rem] h-auto">
+                
+                <div class="w-32 sm:w-40 h-56 flex-shrink-0 bg-gray-200 relative">
+                    {% if livro.foto %}
+                        <img src="{{ livro.foto.url }}" alt="Foto do livro" class="absolute inset-0 w-full h-full object-cover">
+                    {% else %}
+                        <div class="flex items-center justify-center h-full text-gray-400 p-2 text-center text-xs">
+                            Sem Capa
+                        </div>
+                    {% endif %}
                 </div>
-                {% endif %}
-                <div class="p-6">
-                    <h5 class="text-xl font-bold text-gray-800 mb-2">
-                        {{ livro.titulo }}
-                    </h5>
-                    <h3>{{ livro.get_genero_display }}</h3>
-                    
-                    <p class="text-gray-600 mb-1"><strong>Ano:</strong> {{ livro.ano }}</p>
-                    <p class="text-gray-600 mb-1"><strong>Autor:</strong> {{ livro.get_autor_display }}</p>
-                    <p class="text-gray-600 mb-4"><strong>Editora:</strong> {{ livro.get_editora_display }}
-                    </p>
 
-                    <div class="flex justify-end space-x-2">
-                        <a href="{% url 'editar_livro' livro.id %}"
-                            class="bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-teal-700 transition duration-300">
-                            Editar
-                        </a>
-                        <a href="{% url 'deletar_livro' livro.id %}"
-                            class="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300"
-                            onclick="return confirm('Tem certeza que deseja apagar este livro?')">
-                            Apagar
-                        </a>
+                <div class="flex-1 p-4 flex flex-col justify-between">
+                    
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <h5 class="text-lg font-bold text-gray-800 leading-tight mb-1">
+                                {{ livro.titulo }}
+                            </h5>
+                            <span class="bg-gray-100 text-gray-600 text-xs font-semibold px-2 py-1 rounded">
+                                {{ livro.get_genero_display }}
+                            </span>
+                        </div>
+
+                        <p class="text-sm text-teal-700 font-semibold mb-2">
+                            {{ livro.get_autor_display }}
+                        </p>
+
+                        {% if livro.sinopse %}
+                        <div class="mb-3 pl-2 border-l-2 border-gray-300">
+        
+                            <p id="sinopse-curta-{{ livro.id }}" class="text-sm text-gray-600 italic">
+                                "{{ livro.sinopse|truncatewords:20 }}"
+                            </p>
+
+                            <p id="sinopse-completa-{{ livro.id }}" class="text-sm text-gray-600 italic hidden">
+                                "{{ livro.sinopse }}"
+                            </p>
+
+                            {% if livro.sinopse|wordcount > 20 %}
+                            <button id="btn-mais-{{ livro.id }}" onclick="toggleSinopse({{ livro.id }})" class="text-xs font-bold text-teal-600 hover:text-teal-800 hover:underline mt-1 focus:outline-none">
+                                + Ler mais
+                            </button>
+                            {% endif %}
+        
+                        </div>
+                        {% endif %}
+
+                        <div class="text-sm text-gray-500 space-y-1">
+                            <p><strong>Editora:</strong> {{ livro.get_editora_display }}</p>
+                            <p><strong>Ano:</strong> {{ livro.ano }}</p>
+                        </div>
                     </div>
+
+                    <div class="flex justify-end gap-2 mt-4 pt-2 border-t border-gray-100">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'criar_review' %}?livro={{ livro.id }}" 
+                           class="bg-blue-600 text-white text-sm font-semibold py-1.5 px-3 rounded hover:bg-blue-700 transition duration-300 flex items-center shadow-sm">
+                            Avaliar
+                        </a>
+                        {% endif %}
+
+                        {% if user.is_superuser %}
+                        <a href="{% url 'editar_livro' livro.id %}" 
+                           class="bg-teal-600 text-white text-sm font-semibold py-1.5 px-3 rounded hover:bg-teal-700 transition duration-300 shadow-sm">
+                           Editar
+                        </a>
+                        <a href="{% url 'deletar_livro' livro.id %}" 
+                           class="bg-red-600 text-white text-sm font-semibold py-1.5 px-3 rounded hover:bg-red-700 transition duration-300 shadow-sm"
+                           onclick="return confirm('Tem certeza que deseja apagar este livro?')">
+                           Apagar
+                        </a>
+                        {% endif %}
+                    </div>
+
                 </div>
             </div>
             {% empty %}
-            <div class="col-span-1 sm:col-span-2 lg:col-span-3">
+            <div class="col-span-1 lg:col-span-2">
                 <div class="bg-white text-center p-8 rounded-lg shadow-md">
                     <p class="text-gray-700 font-semibold">Nenhum livro cadastrado.</p>
                 </div>
@@ -87,4 +130,15 @@
         </div>
     </div>
 </body>
+<script>
+    function toggleSinopse(id) {
+        const curto = document.getElementById(`sinopse-curta-${id}`);
+        const completo = document.getElementById(`sinopse-completa-${id}`);
+        const botao = document.getElementById(`btn-mais-${id}`);
+
+        curto.classList.add('hidden');
+        completo.classList.remove('hidden');
+        botao.classList.add('hidden');
+    }
+</script>
 {% endblock %}

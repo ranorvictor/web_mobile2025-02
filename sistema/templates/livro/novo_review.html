@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block titulo %} Nova Avaliação {% endblock %}
+
+{% block conteudo %}
+
+<h2>Avaliar um Livro</h2>
+<hr>
+
+<form action="{% url 'criar_review' %}" method="post">
+{% csrf_token %}
+    
+    <div class="row mb-3">
+        <div class="col-6">
+            <label for="livro" class="form-label">Qual livro você leu?</label>
+            {{ form.livro }}
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6">
+            <label for="nota" class="form-label">Nota (1 a 5)</label>
+            {{ form.nota }}
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6">
+            <label for="texto" class="form-label">O que você achou?</label>
+            {{ form.texto }} 
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">Publicar Review</button>
+    <a href="{% url 'listar_livro' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+{% endblock %}

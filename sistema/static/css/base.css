@@ -1,0 +1,77 @@
+/* =========================================
+   Estilos Gerais (Reset básico e Corpo)
+   ========================================= */
+body {
+    /* Um cinza bem claro para o fundo da página, 
+       destacando o menu e o conteúdo branco */
+    background-color: #f8f9fa; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================
+   Menu Superior (#menu-superior)
+   ========================================= */
+#menu-superior {
+    background-color: #ffffff; /* Fundo branco para o menu */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08); /* Sombra suave embaixo */
+}
+
+/* Ajustes na logo "WebMobile" */
+#menu-superior .text-secondary {
+    transition: color 0.3s ease;
+}
+
+#menu-superior a:hover .text-secondary {
+    color: #212529 !important; /* Fica preto ao passar o mouse na logo */
+}
+
+/* Links de Navegação */
+#menu-superior .nav-link {
+    font-weight: 500; /* Fonte um pouco mais grossa */
+    margin: 0 5px;    /* Espaço lateral entre os links */
+    transition: all 0.3s ease;
+    border-radius: 5px; /* Bordas arredondadas no hover */
+}
+
+/* Efeito ao passar o mouse nos links */
+#menu-superior .nav-link:hover {
+    background-color: #e9ecef; /* Fundo cinza claro */
+    color: #212529 !important; /* Texto escuro */
+    transform: translateY(-2px); /* Leve subida no link */
+}
+
+/* Link ativo (se você adicionar a classe .active no futuro) */
+#menu-superior .nav-link.active {
+    background-color: #6c757d;
+    color: white !important;
+}
+
+/* Botão de Logout */
+#menu-superior .btn-outline-secondary {
+    transition: all 0.3s;
+}
+
+#menu-superior .btn-outline-secondary:hover {
+    background-color: #dc3545; /* Vermelho ao passar o mouse (alerta de sair) */
+    border-color: #dc3545;
+    color: white;
+}
+
+/* =========================================
+   Conteúdo Principal (#conteudo)
+   ========================================= */
+#conteudo {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    /* Sombra leve para destacar o conteúdo do fundo cinza */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+    
+    /* Garante que o conteúdo ocupe espaço e empurre o rodapé se houver */
+    flex: 1; 
+}

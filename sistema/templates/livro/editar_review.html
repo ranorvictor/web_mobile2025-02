@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block titulo %} Editar Avaliação {% endblock %}
+
+{% block conteudo %}
+
+<h2>Editar sua Avaliação</h2>
+<hr>
+
+<form method="post">
+{% csrf_token %}
+    
+    <div class="alert alert-secondary">
+        Editando review do livro: <strong>{{ object.livro.titulo }}</strong>
+    </div>
+
+    <div style="display:none;">
+        {{ form.livro }}
+    </div>
+
+    <div class="mb-3">
+        <label for="nota" class="form-label">Sua Nota</label>
+        {{ form.nota }}
+    </div>
+
+    <div class="mb-3">
+        <label for="texto" class="form-label">Sua Opinião</label>
+        {{ form.texto }} 
+    </div>
+
+    <button type="submit" class="btn btn-warning">Salvar Alterações</button>
+    <a href="{% url 'meus_reviews' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+{% endblock %}

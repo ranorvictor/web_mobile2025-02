@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-guc%m^jr!+si%tg4%0$(_onzvi(l%_6f0oid#%l^#t&_+ja($2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'livro',
-    'anuncio',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
@@ -131,17 +130,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR/'static'
-STATICFILES_DIRS = [BASE_DIR/'sistema'/'static']
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_REDIRECT_URL = '/livro/'
+
 LOGIN_URL = '/'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8100",
-    "http://127.0.0.1:8100",
-]
+# Configuração de arquivos de mídia
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+CORS_ALLOW_ALL_ORIGINS = True
