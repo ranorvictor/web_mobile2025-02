@@ -1,0 +1,32 @@
+instalar django
+criar sistema
+arrumar lingua em settings
+arrumar urls
+arrumar dir
+criar vies 
+pasta templates
+arrumar static urls
+criar login
+criar autenticacao em templates
+criar tela de Login
+
+
+http://127.0.0.1:8000/admin/authtoken/tokenproxy/1/change/
+
+4efeff3960f8a88097229c7373a967a5896391f0
+
+
+Aplicações nativas
+
+desenvolvimento para uma plataforma especifica: android x IOS
+
+Plataforma x Linguagem de Programação
+
+Aplicativos Híbridos
+
+Muitos apps são Híbridos
+
+App store (swift) e Google play(Cordova): ferramenta mais utilizada para criação dos apps
+
+ionic start sistema-mobile blank --type=angular
+

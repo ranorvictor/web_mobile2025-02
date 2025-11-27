@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block titulo %} Listagem de Livros {% endblock %}
+
+{% block conteudo %}
+
+<form action="/livro/{{ object.pk }}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+    <div class="row">
+        <div class="col-6">
+            <label for="genero" class="form-label">Genero</label>
+            {{ form.genero }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label for="titulo" class="form-label">Titulo</label>
+            {{ form.titulo }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label for="ano" class="form-label">Ano</label>
+            {{ form.ano }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label for="autor" class="form-label">Autor</label>
+            {{ form.autor }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label for="editora" class="form-label">Editora</label>
+            {{ form.editora }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label for="foto" class="form-label">Foto</label>
+            {{ form.foto }}
+        </div>
+    </div>
+    <button type="submit" lass="btn btn-primary">Salvar Edições</button>
+</form>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block titulo %} Listagem de Anuncios {% endblock %}
+
+{% block conteudo %}
+
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <div class="container mx-auto mt-8 p-4">
+
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">Anuncios Cadastrados</h2>
+            <div class="w-full md:w-1/3">
+                <form method="get" class="flex items-center">
+                    <input type="text" name="busca"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-teal-600 transition duration-200"
+                        placeholder="Procurar por título, autor..." value="{{ request.GET.busca }}">
+                    <button
+                        class="bg-teal-700 text-white font-bold py-2 px-4 rounded-r-lg hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-700 transition duration-300"
+                        type="submit">
+                        Procurar
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <p class="text-gray-600 mb-6">
+            Total de Anúncios encontrados:
+            <span class="font-bold text-teal-700">{{ listar_anuncio | length }}</span>
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for anuncio in listar_anuncio %}
+            <div
+                class="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                {% if anuncio.livro.foto %}
+                <img src="{{ anuncio.livro.foto.url }}" alt="Foto do livro" class="w-full h-48 object-cover">
+                {% else %}
+                <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                    <span class="text-gray-500">Livro sem foto</span>
+                </div>
+                {% endif %}
+                <div class="p-6">
+                    <h5 class="text-xl font-bold text-gray-800 mb-2">
+                        {{ anuncio.livro.titulo }}
+                    </h5>
+                    <p class="text-gray-600 mb-1"><strong>Descrição:</strong> {{ anuncio.descricao }}</p>
+                    <p class="text-gray-600 mb-1"><strong>Preço:</strong> R$ {{ anuncio.preco }}</p>
+                    <p class="text-gray-600 mb-1"><strong>Usuário:</strong> {{ anuncio.usuario.username }}</p>
+                    <p class="text-gray-600 mb-1"><strong>Data:</strong> {{ anuncio.data|date:"d/m/Y H:i" }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-1 sm:col-span-2 lg:col-span-3">
+                <div class="bg-white text-center p-8 rounded-lg shadow-md">
+                    <p class="text-gray-700 font-semibold">Nenhum anúncio cadastrado.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+{% endblock %}
