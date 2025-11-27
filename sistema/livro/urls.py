@@ -1,5 +1,10 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from livro.views import *
+
+router = DefaultRouter()
+router.register(r'livros', LivroViewSet, basename='livro')
+router.register(r'reviews', ReviewViewSet, basename='review')
 
 urlpatterns = [
     path('', Listarlivros.as_view(), name = 'listar_livro'),
@@ -13,4 +18,6 @@ urlpatterns = [
     path('review/editar/<int:pk>/', EditarReview.as_view(), name='editar_review'),
     path('review/deletar/<int:pk>/', DeletarReview.as_view(), name='deletar_review'),
     path('perfil/', MeuPerfil.as_view(), name='meu_perfil'),
+    # API REST
+    path('api/v1/', include(router.urls)),
 ]

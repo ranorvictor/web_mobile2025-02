@@ -9,13 +9,13 @@
 {% csrf_token %}
     <div class="row">
         <div class="col-6">
-            <label for="genero" class="form-label">Genero</label>
+            <label for="genero" class="form-label">Gênero</label>
             {{ form.genero }}
         </div>
     </div>
     <div class="row">
         <div class="col-6">
-            <label for="titulo" class="form-label">Titulo</label>
+            <label for="titulo" class="form-label">Título</label>
             {{ form.titulo }}
         </div>
     </div>
@@ -49,6 +49,6 @@
             {{ form.foto }}
         </div>
     </div>
-    <button type="submit" lass="btn btn-primary">Cadastrar novo livro</button>
+    <button type="submit" class="btn btn-outline-dark mt-2">Cadastrar novo livro</button>
 </form>
 {% endblock %}

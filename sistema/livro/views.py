@@ -14,10 +14,13 @@ from .models import Perfil
 # Seus Imports Locais
 from livro.models import Livro, Review
 from livro.forms import FormularioLivro, FormularioReview, FormularioCadastro
-from livro.serializers import SerializadorLivro
+from livro.serializers import SerializadorLivro, SerializadorReview
 
 # Rest Framework Imports
 from rest_framework.generics import ListAPIView
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import permissions
@@ -87,6 +90,26 @@ class APIListarLivros(ListAPIView):
     
     def get_queryset(self):
         return Livro.objects.all()
+
+class LivroViewSet(ModelViewSet):
+    queryset = Livro.objects.all()
+    serializer_class = SerializadorLivro
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+class ReviewViewSet(ModelViewSet):
+    queryset = Review.objects.select_related('livro', 'usuario').all()
+    serializer_class = SerializadorReview
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user)
+
+    @action(detail=False, methods=['get'])
+    def meus(self, request):
+        qs = Review.objects.filter(usuario=request.user).order_by('-data_criacao')
+        return Response(SerializadorReview(qs, many=True).data)
 
 class CadastroUsuario(CreateView):
     template_name = 'livro/cadastro_usuario.html'

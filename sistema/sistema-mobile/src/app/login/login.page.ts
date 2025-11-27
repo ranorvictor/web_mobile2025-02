@@ -1,5 +1,7 @@
 import { FormsModule } from '@angular/forms';
 import { Storage } from '@ionic/storage-angular';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from '../services/token.interceptor';
 import { Component, OnInit } from '@angular/core';
 import { CapacitorHttp, HttpOptions, HttpResponse } from '@capacitor/core';
 import { IonContent, LoadingController, NavController, AlertController, ToastController, IonList, IonItem, IonInput, IonButton } from '@ionic/angular/standalone';
@@ -10,8 +12,8 @@ import { Usuario } from './usuario.model';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonList, IonItem, IonInput, IonButton, IonContent, FormsModule],
-  providers: [Storage]
+  imports: [IonList, IonItem, IonInput, IonButton, IonContent, FormsModule, HttpClientModule],
+  providers: [Storage, { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }]
 })
 export class LoginPage implements OnInit {
 
@@ -21,7 +23,7 @@ export class LoginPage implements OnInit {
     public controle_alerta: AlertController,
     public controle_toast: ToastController,
     public storage: Storage
-  ) { }
+  , private http: HttpClient) { }
 
   async ngOnInit() {
     await this.storage.create();
@@ -39,38 +41,20 @@ export class LoginPage implements OnInit {
     await loading.present();
 
     // Define informações do cabeçalho da requisição
-    const options: HttpOptions = {
-      headers: {'Content-Type': 'application/json'},
-      url: 'http://127.0.0.1:8000/autenticacao-api/',
-      data: this.instancia
-    };
-
-    // Autentica usuário junto a API do sistema web
-    CapacitorHttp.post(options)
-      .then(async (resposta: HttpResponse) => {
-
-        // Verifica se a requisição foi processada com sucesso
-        if(resposta.status == 200) {
-
-          // Armazena localmente as credenciais de usuário
-          let usuario: Usuario = Object.assign(new Usuario(), resposta.data);
+    this.http.post('http://127.0.0.1:8000/autenticacao-api/', this.instancia)
+      .subscribe({
+        next: async (data: any) => {
+          let usuario: Usuario = Object.assign(new Usuario(), data);
           await this.storage.set('usuario', usuario);
-          
-          // Finaliza autenticação e redireciona para interface inicial
+          await this.storage.set('auth_token', data?.token);
           loading.dismiss();
           this.controle_navegacao.navigateRoot('/home');
-        }
-        else {
-
-          // Finaliza autenticação e apresenta mensagem de erro
+        },
+        error: async (erro) => {
+          console.error(erro);
           loading.dismiss();
-          this.apresenta_mensagem(resposta.status);
+          this.apresenta_mensagem(erro?.status || 400);
         }
-      })
-      .catch(async (erro: any) => {
-        console.log(erro);
-        loading.dismiss();
-        this.apresenta_mensagem(erro?.status);
       });
   }
 

@@ -15,7 +15,8 @@ import {
   IonCardContent 
 } from '@ionic/angular/standalone';
 
-import { LivroService } from '../services/livro';
+import { LivroService } from '../services/livro.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +34,8 @@ import { LivroService } from '../services/livro';
     IonCardHeader, 
     IonCardSubtitle, 
     IonCardTitle, 
-    IonCardContent
+    IonCardContent,
+    HttpClientModule
   ],
 })
 export class HomePage implements OnInit {
@@ -47,7 +49,7 @@ export class HomePage implements OnInit {
   }
 
   carregarLivros() {
-    this.livroService.getLivros().subscribe(
+    this.livroService.listar().subscribe(
       (data) => {
         console.log('Livros:', data);
         this.listaLivros = data;

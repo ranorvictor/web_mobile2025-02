@@ -52,4 +52,9 @@ def criar_perfil(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def salvar_perfil(sender, instance, **kwargs):
-    instance.perfil.save()
+    # Garante que usuários antigos sem perfil não quebrem ao salvar
+    try:
+        perfil = instance.perfil
+    except Perfil.DoesNotExist:
+        perfil = Perfil.objects.create(usuario=instance)
+    perfil.save()
