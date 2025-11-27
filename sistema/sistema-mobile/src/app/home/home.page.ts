@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Importante para *ngFor e *ngIf
+import { CommonModule } from '@angular/common'; 
 
-// Importe TODOS os componentes visuais que vai usar
 import { 
   IonContent, 
   IonHeader, 
@@ -22,9 +21,9 @@ import { HttpClientModule } from '@angular/common/http';
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  standalone: true, // Garanta que isso está true
+  standalone: true, 
   imports: [
-    CommonModule, // Necessário para lógica (if/for)
+    CommonModule, 
     IonContent, 
     IonHeader, 
     IonTitle, 

@@ -5,22 +5,21 @@
 
 {% block css_local %}
 <style>
-    /* Esconde a bolinha padrão do rádio button */
     .icone-radio input {
         display: none;
     }
-    /* Estilo da imagem quando NÃO selecionada */
+   
     .icone-radio img {
         cursor: pointer;
         border: 4px solid transparent;
         border-radius: 50%;
         transition: 0.3s;
         opacity: 0.6;
-        object-fit: cover; /* Garante que a imagem não distorça */
+        object-fit: cover; 
     }
-    /* Estilo da imagem quando SELECIONADA */
+   
     .icone-radio input:checked + img {
-        border-color: #0d6efd; /* Azul Bootstrap */
+        border-color: #0d6efd; 
         opacity: 1;
         transform: scale(1.1);
         box-shadow: 0 0 10px rgba(13, 110, 253, 0.5);

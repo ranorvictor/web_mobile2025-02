@@ -8,7 +8,6 @@ import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 
-// 1. IMPORTAR ISSO
 import { provideHttpClient } from '@angular/common/http';
 
 if (environment.production) {
@@ -21,7 +20,6 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     provideRouter(routes),
     
-    // 2. ADICIONAR ISSO AQUI:
     provideHttpClient(),
   ],
 });

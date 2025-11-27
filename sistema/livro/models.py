@@ -5,7 +5,6 @@ from livro.consts import OPCOES_GENERO, OPCOES_AUTORES, OPCOES_EDITORAS, OPCOES_
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# Create your models here.
 class Livro(models.Model):
     genero = models.SmallIntegerField(choices=OPCOES_GENERO)
     titulo = models.CharField(max_length=200)
@@ -28,7 +27,7 @@ class Livro(models.Model):
 class Review(models.Model):
     livro = models.ForeignKey(Livro, on_delete=models.CASCADE, related_name='reviews')
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    nota = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)]) # Notas 1 a 5
+    nota = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
     texto = models.TextField()
     data_criacao = models.DateTimeField(auto_now_add=True)
 
@@ -43,8 +42,7 @@ class Perfil(models.Model):
     def __str__(self):
         return f"Perfil de {self.usuario.username}"
 
-# --- SINAL MÁGICO ---
-# Isso cria o Perfil automaticamente assim que um User é criado no cadastro
+
 @receiver(post_save, sender=User)
 def criar_perfil(sender, instance, created, **kwargs):
     if created:
@@ -52,7 +50,6 @@ def criar_perfil(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def salvar_perfil(sender, instance, **kwargs):
-    # Garante que usuários antigos sem perfil não quebrem ao salvar
     try:
         perfil = instance.perfil
     except Perfil.DoesNotExist:

@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from django.contrib.auth.forms import UserCreationForm # Já vem pronto do Django
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from livro.models import Livro, Review, Perfil
 class FormularioLivro(ModelForm):
@@ -39,7 +39,7 @@ class FormularioCadastro(UserCreationForm):
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email'] # Deixamos username de fora por segurança
+        fields = ['first_name', 'last_name', 'email']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -52,5 +52,4 @@ class PerfilUpdateForm(forms.ModelForm):
         fields = ['icone', 'bio']
         widgets = {
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            # O campo icone vamos manipular no HTML para ser visual
         }

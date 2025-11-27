@@ -12,7 +12,6 @@ class Login(View):
     def get(self, request):
         contexto = {}
         if request.user.is_authenticated:
-            # Redireciona usando o 'name' da URL definido em urls.py
             return redirect('listar_livro') 
         else:
             return render(request, 'autenticacao.html', contexto)
@@ -27,11 +26,9 @@ class Login(View):
             if user.is_active:
                 login(request, user)
                 
-                # --- CORREÇÃO AQUI ---
-                # Verifica se o usuário tem perfil. Se der erro (não tem), cria um.
                 try:
                     p = user.perfil
-                except Perfil.DoesNotExist: # Ou RelatedObjectDoesNotExist
+                except Perfil.DoesNotExist: 
                     Perfil.objects.create(usuario=user)
                 # ---------------------
 
@@ -42,7 +39,7 @@ class Logout(View):
 
     def get(self, request):
         logout(request)
-        return redirect('/') # Redireciona para a tela de login
+        return redirect('/')
     
 class LoginAPI(obtainAuthToken):
 

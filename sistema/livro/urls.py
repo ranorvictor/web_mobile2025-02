@@ -18,6 +18,5 @@ urlpatterns = [
     path('review/editar/<int:pk>/', EditarReview.as_view(), name='editar_review'),
     path('review/deletar/<int:pk>/', DeletarReview.as_view(), name='deletar_review'),
     path('perfil/', MeuPerfil.as_view(), name='meu_perfil'),
-    # API REST
     path('api/v1/', include(router.urls)),
 ]
